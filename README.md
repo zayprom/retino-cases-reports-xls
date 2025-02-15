@@ -34,7 +34,7 @@ This will generate a `tickets.xlsx` file in your current directory with the foll
 - ID
 - Code
 - Order ID
-- Type (Reklamace/Vratka)
+- Type (Complaint/Return)
 - Product Name
 - Customer Name
 - Order Date

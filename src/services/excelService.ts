@@ -24,9 +24,9 @@ const EXCEL_COLUMNS = [
 function mapTicketType(type: string): string {
   switch (type) {
     case TICKET_TYPES.RELKLAMACE:
-      return "Reklamace";
+      return "Complaint";
     case TICKET_TYPES.VRATKA:
-      return "Vratka";
+      return "Return";
     default:
       return type;
   }
@@ -43,12 +43,6 @@ export async function generateExcelReport(
     worksheet.columns = EXCEL_COLUMNS;
 
     tickets.forEach((row) => {
-      if (row.type === "fb21dbfe-00f5-4197-8f66-d2b7006b020b") {
-        row.type = "Reklamace";
-      } else if (row.type === "7eaa311a-42ab-47e1-8a79-0081d9136aac") {
-        row.type = "Vratka";
-      }
-
       const orderDate = new Date(row.order_date);
       const createdDate = new Date(row.created_at);
       const closed_at = row.closed_at ? new Date(row.closed_at) : null;
@@ -64,7 +58,7 @@ export async function generateExcelReport(
         id: row.id,
         code: row.code,
         order_id: row.order_id,
-        type: row.type,
+        type: mapTicketType(row.type),
         product_name: row.products.map((product) => product.name).join(", "),
         customer_name: row.customer.name,
         order_date: row.order_date,
