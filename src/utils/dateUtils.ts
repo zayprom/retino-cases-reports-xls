@@ -5,3 +5,12 @@ export function formatDate(date: Date) {
     year: "numeric",
   });
 }
+
+export function calculateDaysDifference(
+  orderDate: Date,
+  createdDate: Date
+): number {
+  return Math.ceil(
+    (createdDate.getTime() - orderDate.getTime()) / (1000 * 3600 * 24)
+  );
+}
