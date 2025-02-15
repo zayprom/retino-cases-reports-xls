@@ -1,7 +1,7 @@
 import { API_CONFIG } from "../config/constants";
 import { type ResponseType } from "../types";
 
-export const response: ResponseType = await fetch(API_CONFIG.BASE_URL, {
+export const fetchTickets: ResponseType = await fetch(API_CONFIG.BASE_URL, {
   method: "GET",
   headers: {
     Authorization: `Token ${API_CONFIG.TOKEN_KEY}`,

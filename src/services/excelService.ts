@@ -1,7 +1,6 @@
 import ExcelJS from "exceljs";
 import { formatDate, calculateDaysDifference } from "../utils/dateUtils";
 import { type ResultsType } from "../types";
-import { response } from "./api";
 
 const TICKET_TYPES = {
   RELKLAMACE: "fb21dbfe-00f5-4197-8f66-d2b7006b020b",
@@ -33,16 +32,17 @@ function mapTicketType(type: string): string {
   }
 }
 
-export async function generateExcelReport() {
-  const results: ResultsType[] = response.results;
-
+export async function generateExcelReport(
+  tickets: ResultsType[],
+  outputPath: string = "tickets.xlsx"
+) {
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet("Tickets");
 
-  if (results && results.length > 0) {
+  if (tickets && tickets.length > 0) {
     worksheet.columns = EXCEL_COLUMNS;
 
-    results.forEach((row) => {
+    tickets.forEach((row) => {
       if (row.type === "fb21dbfe-00f5-4197-8f66-d2b7006b020b") {
         row.type = "Reklamace";
       } else if (row.type === "7eaa311a-42ab-47e1-8a79-0081d9136aac") {
@@ -75,7 +75,7 @@ export async function generateExcelReport() {
       });
     });
 
-    await workbook.xlsx.writeFile("tickets.xlsx");
+    await workbook.xlsx.writeFile(outputPath);
     console.log("Excel file created successfully");
   }
 }
