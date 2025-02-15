@@ -3,26 +3,44 @@ import { formatDate, calculateDaysDifference } from "../utils/dateUtils";
 import { type ResultsType } from "../types";
 import { response } from "./api";
 
-export async function createExcel() {
+const TICKET_TYPES = {
+  RELKLAMACE: "fb21dbfe-00f5-4197-8f66-d2b7006b020b",
+  VRATKA: "7eaa311a-42ab-47e1-8a79-0081d9136aac",
+} as const;
+
+const EXCEL_COLUMNS = [
+  { header: "ID", key: "id", width: 20 },
+  { header: "Code", key: "code", width: 20 },
+  { header: "Order ID", key: "order_id", width: 20 },
+  { header: "type", key: "type", width: 20 },
+  { header: "Product Name", key: "product_name", width: 20 },
+  { header: "Customer Name", key: "customer_name", width: 20 },
+  { header: "Order Date", key: "order_date", width: 20 },
+  { header: "Created At", key: "created_at", width: 20 },
+  { header: "Lifetime", key: "lifetime", width: 20 },
+  { header: "Closed At", key: "closed_at", width: 20 },
+  { header: "Country", key: "country", width: 10 },
+];
+
+function mapTicketType(type: string): string {
+  switch (type) {
+    case TICKET_TYPES.RELKLAMACE:
+      return "Reklamace";
+    case TICKET_TYPES.VRATKA:
+      return "Vratka";
+    default:
+      return type;
+  }
+}
+
+export async function generateExcelReport() {
   const results: ResultsType[] = response.results;
 
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet("Tickets");
 
   if (results && results.length > 0) {
-    worksheet.columns = [
-      { header: "ID", key: "id", width: 20 },
-      { header: "Code", key: "code", width: 20 },
-      { header: "Order ID", key: "order_id", width: 20 },
-      { header: "type", key: "type", width: 20 },
-      { header: "Product Name", key: "product_name", width: 20 },
-      { header: "Customer Name", key: "customer_name", width: 20 },
-      { header: "Order Date", key: "order_date", width: 20 },
-      { header: "Created At", key: "created_at", width: 20 },
-      { header: "Lifetime", key: "lifetime", width: 20 },
-      { header: "Closed At", key: "closed_at", width: 20 },
-      { header: "Country", key: "country", width: 10 },
-    ];
+    worksheet.columns = EXCEL_COLUMNS;
 
     results.forEach((row) => {
       if (row.type === "fb21dbfe-00f5-4197-8f66-d2b7006b020b") {

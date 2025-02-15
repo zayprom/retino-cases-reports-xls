@@ -1,3 +1,3 @@
-import { createExcel } from "./src/services/excelService";
+import { generateExcelReport } from "./src/services/excelService";
 
-createExcel().catch((error) => console.error(error));
+generateExcelReport().catch((error) => console.error(error));
